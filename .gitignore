@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# 运行时生成的数据与会话密钥，不应提交
+server/data/
+
+# 本地环境变量（SMTP 授权码等敏感信息）
+server/.env
+
+# 测试产物
+shots/
+.e2e-profile/
+e2e-out.txt
+.claude/settings.local.json

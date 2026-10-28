@@ -1,0 +1,399 @@
+/* ================= 设计令牌 =================
+   全站唯一主题入口：青绿主色 + 浅灰画布 + 白色卡片。
+   页面里尽量只引用变量，不再写死品牌色。 */
+:root {
+  /* 主色：只用于可交互元素（按钮 / 选中态 / 链接 / FAB） */
+  --c-primary: #12b886;
+  --c-primary-dark: #0b8a66;
+  --c-primary-light: #e6f7f1;
+  --c-primary-ring: rgba(18, 184, 134, 0.28);
+
+  /* 语义色：收入青、支出珊瑚红，与青绿主色拉开 */
+  --c-expense: #f0435b;
+  --c-expense-light: #fff0f2;
+  --c-income: #0891b2;
+  --c-income-light: #e7f6fa;
+  --c-warning: #e8930c;
+  --c-warning-light: #fff6e5;
+
+  /* 中性色 */
+  --c-bg: #f6f7f8;
+  --c-card: #ffffff;
+  --c-line: #eff0f2;
+  --c-track: #f0f1f3;
+  --c-text: #1c1f22;
+  --c-text-2: #5a6068;
+  --c-text-3: #9aa0a8;
+
+  /* 圆角 / 阴影 */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+  --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(20, 24, 28, 0.04), 0 1px 1px rgba(20, 24, 28, 0.02);
+  --shadow-md: 0 6px 20px rgba(20, 24, 28, 0.06);
+  --shadow-lg: 0 16px 40px rgba(20, 24, 28, 0.1);
+  --shadow-fab: 0 6px 16px rgba(18, 184, 134, 0.35);
+
+  /* 布局 / 间距 */
+  --app-max: 480px;
+  --nav-h: 46px;
+  --page-x: 16px;
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+
+  /* 字体 */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  --fs-display: 40px;
+  --fs-hero: 32px;
+  --fs-h2: 16px;
+  --fs-body: 14px;
+  --fs-meta: 12px;
+  --fs-caption: 11px;
+
+  /* 图表 */
+  --c-chart-income: #0e9fb8;
+  --c-chart-expense: #f0435b;
+  --c-chart-accent: #12b886;
+  --c-chart-alt: #e8930c;
+  --c-chart-grid: #eceef0;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+
+  /* ---------- Vant ---------- */
+  --van-primary-color: var(--c-primary);
+  --van-danger-color: var(--c-expense);
+  --van-success-color: var(--c-primary);
+  --van-warning-color: var(--c-warning);
+  --van-text-color: var(--c-text);
+  --van-text-color-2: var(--c-text-2);
+  --van-text-color-3: var(--c-text-3);
+  --van-background: var(--c-bg);
+  --van-background-2: var(--c-card);
+  --van-border-color: var(--c-line);
+  --van-radius-md: var(--r-md);
+  --van-radius-lg: var(--r-lg);
+  --van-button-primary-background: var(--c-primary);
+  --van-button-primary-border-color: var(--c-primary);
+  --van-button-primary-color: #fff;
+  --van-button-radius: var(--r-pill);
+  --van-button-default-height: 46px;
+  --van-button-large-height: 50px;
+  --van-font-size-md: 14px;
+  --van-tabbar-item-active-color: var(--c-primary);
+  --van-tabbar-item-text-color: var(--c-text-3);
+  --van-nav-bar-background: var(--c-card);
+  --van-nav-bar-icon-color: var(--c-text);
+  --van-nav-bar-text-color: var(--c-text);
+  --van-nav-bar-title-text-color: var(--c-text);
+  --van-tabs-bottom-bar-color: var(--c-primary);
+  --van-search-content-background: var(--c-bg);
+  --van-field-label-color: var(--c-text-2);
+  --van-cell-text-color: var(--c-text);
+  --van-picker-background: var(--c-card);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: #eceef0;
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* H5 画布：手机全宽，桌面预览时居中成 480px 的 App 宽度 */
+#app {
+  position: relative;
+  max-width: var(--app-max);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--c-bg);
+}
+
+@media (min-width: 520px) {
+  #app {
+    box-shadow: 0 0 0 1px var(--c-line), var(--shadow-lg);
+  }
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+/* 金额统一用等宽表格数字 */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* ================= 通用布局 ================= */
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: calc(24px + var(--safe-bottom));
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--c-card);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--s-4);
+}
+
+.section {
+  margin: 12px var(--page-x);
+}
+
+.section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 22px;
+  margin-bottom: 10px;
+}
+
+.section__title {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.section__more {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--c-text-3);
+}
+
+.muted {
+  color: var(--c-text-3);
+}
+.text-expense {
+  color: var(--c-expense);
+}
+.text-income {
+  color: var(--c-income);
+}
+
+/* 分类图标底座 */
+.cat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* 胶囊按钮 / 筛选 chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px 13px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-pill);
+  background: var(--c-card);
+  color: var(--c-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: all 0.15s ease;
+}
+.chip:active,
+.chip.is-active {
+  background: var(--c-primary-light);
+  border-color: var(--c-primary);
+  color: var(--c-primary-dark);
+}
+
+/* 空状态 */
+.empty {
+  padding: 44px 0;
+  text-align: center;
+  color: var(--c-text-3);
+}
+.empty__emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: var(--c-card);
+  box-shadow: var(--shadow-sm);
+  font-size: 28px;
+  line-height: 1;
+}
+.empty__text {
+  font-size: 13px;
+  color: var(--c-text-3);
+}
+.empty .van-button {
+  margin-top: 14px;
+}
+
+/* Auth 页共用的小元素（AuthLayout 卡片内的链接/提示） */
+.auth-switch {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--c-text-3);
+}
+.auth-link {
+  color: var(--c-primary-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+.auth-hint {
+  margin: 16px 0 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--c-text-3);
+  text-align: center;
+}
+.auth-actions {
+  margin-top: 22px;
+}
+
+/* 页面切换动画 */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+}
+
+/* ================= Vant 全局微调 ================= */
+.van-nav-bar {
+  --van-nav-bar-background: var(--c-card);
+}
+body .van-nav-bar {
+  background: var(--c-card);
+}
+body .van-nav-bar__title {
+  color: var(--c-text);
+  font-size: 16px;
+  font-weight: 600;
+}
+body .van-nav-bar__text {
+  color: var(--c-text-2);
+}
+body .van-nav-bar .van-icon {
+  color: var(--c-text-2);
+}
+/* 按需加载的 Vant CSS 会在主样式之后注入，这里用 body 提高优先级，
+   保证固定导航条仍然居中限制在 480px 画布内 */
+body .van-nav-bar--fixed {
+  left: 50%;
+  right: auto;
+  width: 100%;
+  max-width: var(--app-max);
+  transform: translateX(-50%);
+  border-bottom: 1px solid var(--c-line);
+}
+
+body .van-tabbar {
+  height: 60px;
+  border-top: 1px solid var(--c-line);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: saturate(180%) blur(12px);
+  box-shadow: none;
+}
+body .van-tabbar--fixed {
+  left: 50%;
+  right: auto;
+  width: 100%;
+  max-width: var(--app-max);
+  transform: translateX(-50%);
+}
+body .van-tabbar-item__text {
+  font-size: 11px;
+}
+body .van-tabbar-item--active {
+  font-weight: 600;
+}
+
+/* 底部 / 顶部弹层限制在 App 画布内；用 margin 而不是 transform，
+   避免破坏 Vant 自带的滑入动画 */
+body .van-popup--bottom,
+body .van-popup--top {
+  left: 50%;
+  right: auto;
+  width: 100%;
+  max-width: var(--app-max);
+  margin-left: calc(min(100%, var(--app-max)) / -2);
+}
+
+.van-dialog {
+  border-radius: var(--r-xl);
+}
+.van-toast {
+  border-radius: var(--r-md);
+}
+
+.van-button {
+  font-weight: 600;
+}
+.van-button--plain.van-button--primary {
+  background: var(--c-primary-light);
+}
+.van-cell {
+  font-size: var(--fs-body);
+}
+.van-cell::after {
+  border-color: var(--c-line);
+}
+.van-field__control::placeholder {
+  color: var(--c-text-3);
+}
+.van-search__content {
+  border-radius: var(--r-pill);
+}
+.van-tabbar-item__icon {
+  font-size: 21px;
+}
+.van-tabs__nav {
+  background: transparent;
+}
+.van-tab {
+  color: var(--c-text-3);
+}
+.van-tab--active {
+  color: var(--c-text);
+  font-weight: 600;
+}
